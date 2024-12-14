@@ -173,35 +173,54 @@
 	};
 	scrollWindow();
 
+	var counter = function () {
+		$('#section-counter, .hero-wrap, .ftco-counter, .ftco-about').waypoint(function (direction) {
+		  // Check if the element hasn't been animated already
+		  if (direction === 'down' && !$(this.element).hasClass('ftco-animated')) {
+			
+			// Add the ftco-animated class to mark the element as animated
+			$(this.element).addClass('ftco-animated');
+	  
+			$('.number').each(function () {
+			  var $this = $(this),
+				  num = $this.data('number');
+			  console.log(num);
+	  
+			  // Check if this is the Customer Rating (e.g., based on a unique class or ID)
+			  if ($this.closest('.text').find('span').text() === 'Customer Rating') {
+				// Custom numberStep for decimal formatting
+				var decimal_number_step = function (now, tween) {
+				  var target = $(tween.elem);
+				  target.text(now.toFixed(1)); // Ensures one decimal place
+				};
+	  
+				$this.animateNumber(
+				  {
+					number: num,
+					numberStep: decimal_number_step
+				  },
+				  7000
+				);
+			  } else {
+				// Default formatting for other numbers
+				var comma_separator_number_step = $.animateNumber.numberStepFactories.separator(',');
+				$this.animateNumber(
+				  {
+					number: num,
+					numberStep: comma_separator_number_step
+				  },
+				  7000
+				);
+			  }
+			});
+		  }
+		}, { offset: '95%' });
+	  };
+	  
+	  counter();
+	  
+
 	
-
-	var counter = function() {
-		
-		$('#section-counter, .hero-wrap, .ftco-counter, .ftco-about').waypoint( function( direction ) {
-
-			if( direction === 'down' && !$(this.element).hasClass('ftco-animated') ) {
-
-				var comma_separator_number_step = $.animateNumber.numberStepFactories.separator(',')
-				$('.number').each(function(){
-					var $this = $(this),
-						num = $this.data('number');
-						console.log(num);
-					$this.animateNumber(
-					  {
-					    number: num,
-					    numberStep: comma_separator_number_step
-					  }, 7000
-					);
-				});
-				
-			}
-
-		} , { offset: '95%' } );
-
-	}
-	counter();
-
-
 	var contentWayPoint = function() {
 		var i = 0;
 		$('.ftco-animate').waypoint( function( direction ) {
@@ -269,7 +288,7 @@
     fixedContentPos: false
   });
 
-
+  
 
 
 
